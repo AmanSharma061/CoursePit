@@ -17,14 +17,15 @@ const courseSchema = new mongoose.Schema({
   price: {
     type: Number
   },
-  categoryId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category"
+  category: {
+    type: String
   },
-  attachments: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Attachment"
-  },
+  attachments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Attachment"
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now
@@ -36,4 +37,5 @@ const courseSchema = new mongoose.Schema({
 });
 
 const Course = mongoose.models.Course || mongoose.model("Course", courseSchema);
+
 export default Course;

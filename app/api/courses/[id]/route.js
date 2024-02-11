@@ -3,17 +3,14 @@ import Course from "../../../../database/models/courseModel";
 import { NextResponse } from "next/server";
 
 export async function PATCH(request, params) {
-  const {  courseId, values } = await request.json();
-
-  console.log(courseId);
+  const { courseId, values } = await request.json();
+  console.log(values);
   try {
     await connectToDatabase();
     const course = await Course.findByIdAndUpdate(courseId, {
       ...values
     });
-
     await course.save();
-
     return NextResponse.json({ course }, { status: 200 });
   } catch (error) {
     console.log(error);

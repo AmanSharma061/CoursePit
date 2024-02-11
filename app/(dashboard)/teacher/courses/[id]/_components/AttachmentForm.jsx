@@ -17,13 +17,14 @@ import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 import Upload from '../_components/Upload'
 import Image from 'next/image'
+
 const formSchema = z.object({
   imageUrl: z.string().min(2, {
     imageUrl: 'Image is required'
   })
 })
 
-const ImageUploader = ({ initialValues, courseId, setData }) => {
+const AttachmentForm = ({ initialValues, courseId, setData }) => {
   const [isEditing, setIsEditing] = React.useState(false)
   const handler = () => {
     setIsEditing(prev => !prev)
@@ -34,21 +35,26 @@ const ImageUploader = ({ initialValues, courseId, setData }) => {
   })
 
   async function onSubmit (values) {
-    console.log(values)
+
     try {
-      const res = axios.patch(`/api/courses/${courseId}`, {
-        courseId: courseId,
+      const res = axios.post(`/api/courses/${courseId}/attachment`, {
+        courseId,
         values
       })
-      const data = (await res)?.data?.course
+  
+      const data = (await res)?.course
       setData(data)
-      form.reset(data)
-      toast.success('Course updated', {
+      console.log(data)
+      setIsEditing(false)
+      toast.success('Attachment added successfully', {
+        position: 'top-center',
         duration: 800
       })
-
-      setIsEditing(false)
     } catch (error) {
+      toast.error('failed ', {
+        position: 'top-center',
+        duration: 800
+      })
       console.log(error)
     }
   }
@@ -56,10 +62,10 @@ const ImageUploader = ({ initialValues, courseId, setData }) => {
   const { isSubmitting, isValid } = form.formState
 
   return (
-    <div className='mt-4 border bg-slate-50 rounded-md p-4'>
+    <div className='mt-4 border bg-slate-50 rounded-md py-4 px-2'>
       <Toaster />
       <div className='font-medium flex items-center justify-between'>
-        Course Image
+        Course Attachments
         {isEditing ? (
           <>
             <Button
@@ -77,15 +83,15 @@ const ImageUploader = ({ initialValues, courseId, setData }) => {
               className='flex items-center gap-x-2'
               onClick={handler}
             >
-              {initialValues?.imageUrl ? (
+              {initialValues?.attachments ? (
                 <>
                   <Pencil size={16} className='font-bold' />
                   Edit
                 </>
               ) : (
                 <>
-                  <PlusCircle size={16} className='font-bold' />
-                  <p>Add an image</p>
+                  <PlusCircle size={16} className='font-bold ' />
+                  <p className='text-xs'>Add an attachment</p>
                 </>
               )}
             </Button>
@@ -95,21 +101,23 @@ const ImageUploader = ({ initialValues, courseId, setData }) => {
 
       {!isEditing ? (
         <>
-          {initialValues?.imageUrl ? (
+          {initialValues?.url ? (
             <>
               <div className='flex items-center gap-x-2 py-2'>
-                <Image
-                  height={1000}
-                  width={1000}
-                  className='object-cover rounded-md md:h-80 h-36 outline w-full'
-                  src={initialValues?.imageUrl}
-                  alt='image'
-                />
+                {/* {
+                    initialValues?.attachments?.map((attachment)=>{
+                        return (
+                            <p>
+                                {attachment?.name}
+                            </p>
+                        )
+                    })
+                } */}
               </div>
             </>
           ) : (
             <>
-              <p className='text-xs text-gray-500 pt-2'>No Image Uploaded</p>
+              <p className='text-xs text-gray-500 pt-2'>No Attachments yet</p>
             </>
           )}
         </>
@@ -120,10 +128,10 @@ const ImageUploader = ({ initialValues, courseId, setData }) => {
       {isEditing && (
         <div className='flex items-center justify-center flex-col py-4 w-full'>
           <Upload
-            endpoint='courseImage'
+            endpoint='courseAttachment'
             onChange={url => {
               if (url) {
-                onSubmit({ imageUrl: url })
+                onSubmit({ url: url })
               }
             }}
           />
@@ -133,4 +141,4 @@ const ImageUploader = ({ initialValues, courseId, setData }) => {
   )
 }
 
-export default ImageUploader
+export default AttachmentForm

@@ -1,12 +1,21 @@
 'use client'
-import {getCourseById} from "../../../../../lib/helpers/courseHelper"
+import { getCourseById } from '../../../../../lib/helpers/courseHelper'
 import { useUser } from '@clerk/nextjs'
-import { Layout, LayoutDashboard } from 'lucide-react'
+import {
+  IndianRupee,
+  Layout,
+  LayoutDashboard,
+  ListChecks,
+  ListChecksIcon
+} from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import TitleForm from './_components/TitleForm'
 import DescriptionForm from './_components/DescriptionForm'
 import ImageUploader from './_components/ImageUploader'
+import CategoryForm from './_components/CategoryForm'
+import PriceForm from './_components/PriceForm'
+import AttachmentForm from './_components/AttachmentForm'
 
 const page = () => {
   const { userId } = useUser()
@@ -49,19 +58,58 @@ const page = () => {
         </div>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-16 '>
-        <div className='flex items-center gap-x-2'>
-          <div className='w-14 h-14 flex items-center justify-center   rounded-full bg-sky-100 '>
-            <LayoutDashboard className='w-10 h-10 text-sky-700' />
+        <div>
+          <div className='flex items-center gap-x-2 '>
+            <div className='w-14 h-14 flex items-center justify-center   rounded-full bg-sky-100 '>
+              <LayoutDashboard className='w-10 h-10 text-sky-700' />
+            </div>
+            <h2 className='text-xl font-semibold'>Customize Your Course</h2>
           </div>
-          <h2 className='text-xl'>Customize Your Course</h2>
+
+          <div>
+            <TitleForm initialValues={course} courseId={id} setData={setData} />
+            <DescriptionForm
+              initialValues={course}
+              courseId={id}
+              setData={setData}
+            />
+            <ImageUploader
+              initialValues={course}
+              courseId={id}
+              setData={setData}
+            />
+            <CategoryForm
+              initialValues={course}
+              courseId={id}
+              setData={setData}
+            />
+          </div>
         </div>
-        <TitleForm initialValues={course} courseId={id} setData={setData} />
-        <DescriptionForm
-          initialValues={course}
-          courseId={id}
-          setData={setData}
-        />
-        <ImageUploader initialValues={course} courseId={id} setData={setData} />
+
+        <div className='py-2 space-y-8'>
+          <div className='flex  gap-x-2   flex-col justify-start '>
+            <div className='flex  items-center gap-x-2'>
+              <div className='w-14 h-14 flex items-center justify-center   rounded-full bg-sky-100 '>
+                <ListChecksIcon className='w-10 h-10 text-sky-700' />
+              </div>
+              <h2 className='text-xl font-semibold'>Course Chapters</h2>
+            </div>
+            <div>
+              <h1>todos</h1>
+            </div>
+          </div>
+
+          <div className='flex gap-x-4 items-center'>
+            <div className='w-14 h-14 flex items-center justify-center   rounded-full bg-sky-100 '>
+              <IndianRupee className='w-10 h-10 text-sky-700' />
+            </div>
+            <div>
+              <h2 className='text-xl font-semibold'>Sell Your Course</h2>
+            </div>
+          </div>
+          <PriceForm initialValues={course} courseId={id} setData={setData} />
+          <AttachmentForm initialValues={course} courseId={id} setData={setData} />
+        </div>
       </div>
     </div>
   )

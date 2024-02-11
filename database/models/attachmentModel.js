@@ -15,5 +15,6 @@ const attachmentSchema = new mongoose.Schema({
   }
 });
 
-const Attachment = mongoose.model("Attachment", attachmentSchema);
+const Attachment =
+  mongoose.models.Attachment || mongoose.model("Attachment", attachmentSchema);
 export default Attachment;

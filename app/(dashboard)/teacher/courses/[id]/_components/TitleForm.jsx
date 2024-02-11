@@ -4,15 +4,20 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '../../../../../../components/ui/button'
 import { Input } from '../../../../../../components/ui/input'
-import { Form, FormControl, FormField, FormItem } from '../../../../../../components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem
+} from '../../../../../../components/ui/form'
 import { Pencil } from 'lucide-react'
 import React from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 
 const formSchema = z.object({
-  title: z.string().min(2, {
-    title: 'title must be at least 2 characters.'
+  category: z.string().min(2, {
+    category: 'Select Category'
   })
 })
 
@@ -27,6 +32,7 @@ const TitleForm = ({ initialValues, courseId, setData }) => {
   })
 
   async function onSubmit (values) {
+  
     try {
       const res = axios.patch(`/api/courses/${courseId}`, {
         courseId: courseId,
@@ -106,7 +112,7 @@ const TitleForm = ({ initialValues, courseId, setData }) => {
         </>
       ) : (
         <>
-          <p className='text-sm text-gray-500 pt-2' >{initialValues?.title}</p>
+          <p className='text-sm text-gray-500 pt-2'>{initialValues?.title}</p>
         </>
       )}
     </div>

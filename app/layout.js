@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark, neobrutalism, shadesOfPurple } from '@clerk/themes';
+import NextTopLoader from 'nextjs-toploader';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,7 +18,9 @@ export default function RootLayout({ children }) {
     >
 
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+      <NextTopLoader />
+      {children}</body>
     </html>
     </ClerkProvider>
   );

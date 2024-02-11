@@ -19,7 +19,6 @@ const Upload = ({ endpoint, onChange }) => {
           toast.error(`ERROR! ${error.message}`)
         }}
       />
-
     </>
   )
 }

@@ -3,25 +3,26 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '../../../../../../components/ui/button'
-import { Input } from '../../../../../../components/ui/input'
 import {
   Form,
   FormControl,
   FormField,
   FormItem
 } from '../../../../../../components/ui/form'
-import { IndianRupeeIcon, Pencil } from 'lucide-react'
+import { Input } from '../../../../../../components/ui/input'
+import { Pencil } from 'lucide-react'
 import React from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
+import { Textarea } from '../../../../../../components/ui/textarea'
 
 const formSchema = z.object({
-  price: z.string().min(3, {
-    price: 'Add Price Please'
+  category: z.string().min(2, {
+    category: 'title must be at least 2 characters.'
   })
 })
 
-const PriceForm = ({ initialValues, courseId, setData }) => {
+const CategoryForm = ({ initialValues, courseId, setData }) => {
   const [isEditing, setIsEditing] = React.useState(false)
   const handler = () => {
     setIsEditing(prev => !prev)
@@ -32,8 +33,6 @@ const PriceForm = ({ initialValues, courseId, setData }) => {
   })
 
   async function onSubmit (values) {
-    values.price =Number(values.price)
-
     try {
       const res = axios.patch(`/api/courses/${courseId}`, {
         courseId: courseId,
@@ -42,6 +41,7 @@ const PriceForm = ({ initialValues, courseId, setData }) => {
       })
       const data = (await res)?.data?.course
       setData(data)
+      console.log(data)
       form.reset(data)
       toast.success('Course updated', {
         duration: 800
@@ -52,13 +52,14 @@ const PriceForm = ({ initialValues, courseId, setData }) => {
       console.log(error)
     }
   }
+
   const { isSubmitting, isValid } = form.formState
 
   return (
     <div className='mt-4 border bg-slate-50 rounded-md p-4'>
       <Toaster />
       <div className='font-medium flex items-center justify-between'>
-        Course price
+        Course Category
         {isEditing ? (
           <>
             <Button
@@ -85,17 +86,19 @@ const PriceForm = ({ initialValues, courseId, setData }) => {
 
       {!isEditing ? (
         <>
-          {initialValues?.price ? (
+          {initialValues?.category ? (
             <>
               <div className='flex items-center gap-x-2'>
-                <p className='text-sm text-gray-500 pt-2 flex items-center '>
-                  <IndianRupeeIcon size={14} /> {initialValues?.price}
+                <p className='text-sm text-gray-500 pt-2'>
+                  {initialValues?.category}
                 </p>
               </div>
             </>
           ) : (
             <>
-              <p className='text-xs text-gray-500 pt-2'>No price</p>
+              <p className='text-xs text-gray-500 pt-2'>
+                Category not Selected
+              </p>
             </>
           )}
         </>
@@ -111,12 +114,12 @@ const PriceForm = ({ initialValues, courseId, setData }) => {
           >
             <FormField
               control={form.control}
-              name='price'
+              name='category'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
-                      placeholder='e.g. 999'
+                      placeholder='descrpition....'
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -132,4 +135,4 @@ const PriceForm = ({ initialValues, courseId, setData }) => {
   )
 }
 
-export default PriceForm
+export default CategoryForm
